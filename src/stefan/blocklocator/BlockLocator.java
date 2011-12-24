@@ -38,8 +38,15 @@ public class BlockLocator extends JavaPlugin {
 				return true;
 			}
 
+			// Make sure that we have enough parameters
+			if (args.length >= 1) {
+				sender.sendMessage(TAG + " You need to specify a block type to locate");
+				return true;
+			}
+
 			int blockId;
 
+			// Try to parse the int
 			try {
 				blockId = Integer.parseInt(args[0]);
 			} catch (NumberFormatException e) {
