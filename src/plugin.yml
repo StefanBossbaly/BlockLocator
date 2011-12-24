@@ -1,0 +1,9 @@
+name: BlockLocator
+main: stefan.blocklocator.BlockLocator
+version: 0.1
+author: Stefan
+commands:
+    bl:
+        description: Finds the nearest block of the speficied type
+        permission: blocklocator.locate
+        usage: /<command> [block id]
