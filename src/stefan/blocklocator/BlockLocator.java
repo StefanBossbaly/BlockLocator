@@ -60,10 +60,8 @@ public class BlockLocator extends JavaPlugin {
 			}
 
 			// Make sure that we have enough parameters
-			if (args.length >= 1) {
-				sender.sendMessage(TAG + " You need to specify a block type to locate");
-				return true;
-			}
+			if (args.length <= 1)
+				return false;
 
 			int blockId;
 
