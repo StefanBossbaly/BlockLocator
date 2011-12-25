@@ -10,23 +10,44 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * Main class of the plugin.
+ * 
+ * @author Stefan Bossbaly
+ * 
+ */
 public class BlockLocator extends JavaPlugin {
 
-	public static String TAG = "[BlockLocator]";
+	/**
+	 * The tag that will be displayed in the logs for this plugin. Helps the
+	 * user/server admin distinguish between logs of different plugins.
+	 */
+	public static final String TAG = "[BlockLocator]";
 
-	private Logger log = Logger.getLogger("Minecraft");
+	/**
+	 * Logger that will be used to output messages to the log.
+	 */
+	public static final Logger log = Logger.getLogger("Minecraft");
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onDisable() {
 		log.info(TAG + " onDisable() called. Shutting down ...");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onEnable() {
 		log.info(TAG + " onEnabled() called. Starting up ...");
-
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
