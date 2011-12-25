@@ -60,7 +60,7 @@ public class BlockLocator extends JavaPlugin {
 			}
 
 			// Make sure that we have enough parameters
-			if (args.length <= 1)
+			if (args.length < 1)
 				return false;
 
 			int blockId;
