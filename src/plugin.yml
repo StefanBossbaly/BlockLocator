@@ -4,6 +4,6 @@ version: 0.1
 author: Stefan
 commands:
     bl:
-        description: Finds the nearest block of the speficied type
+        description: Finds the nearest blocks of the specified id
         permission: blocklocator.locate
         usage: /<command> [block id]
