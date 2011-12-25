@@ -94,7 +94,24 @@ public class BlockLocator extends JavaPlugin {
 				}
 			}
 
-			player.sendMessage(TAG + " Found " + locs.size() + " many with these locations");
+			player.sendMessage(TAG + " Found " + locs.size() + " many blocks");
+
+			// Make sure we at least have one location
+			if (locs.size() >= 1) {
+				Location minLoc = null;
+				double minDistance = Double.MAX_VALUE;
+
+				for (Location temp : locs) {
+					double distance = distance(loc, temp);
+					if (distance == Math.min(minDistance, distance)) {
+						minDistance = distance;
+						minLoc = temp;
+					}
+				}
+
+				player.sendMessage(TAG + " The closest block is (" + minLoc.getX() + "," + minLoc.getY() + "," + minLoc.getZ() + ") with a distance of "
+						+ minDistance);
+			}
 
 			return true;
 		}
@@ -102,4 +119,16 @@ public class BlockLocator extends JavaPlugin {
 		return false;
 	}
 
+	/**
+	 * Calculates and returns the distance between the two locations.
+	 * 
+	 * @param loc1
+	 *            the first location
+	 * @param loc2
+	 *            the second location
+	 * @return the distance between the locations
+	 */
+	private static double distance(Location loc1, Location loc2) {
+		return Math.sqrt(Math.pow(loc1.getX() - loc2.getX(), 2.0) + Math.pow(loc1.getY() - loc2.getY(), 2.0) + Math.pow(loc1.getZ() - loc2.getZ(), 2.0));
+	}
 }
