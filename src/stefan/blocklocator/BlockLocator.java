@@ -123,6 +123,8 @@ public class BlockLocator extends JavaPlugin {
 	}
 
 	/**
+	 * Gets the closest locations out of the list of locations to the position
+	 * location
 	 * 
 	 * @param locations
 	 *            the list of locations that will be compared
