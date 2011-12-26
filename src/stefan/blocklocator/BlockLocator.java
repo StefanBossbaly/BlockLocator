@@ -1,6 +1,7 @@
 package stefan.blocklocator;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Location;
@@ -96,22 +97,11 @@ public class BlockLocator extends JavaPlugin {
 
 			player.sendMessage(TAG + " Found " + locs.size() + " many blocks");
 
-			// Make sure we at least have one location
-			if (locs.size() >= 1) {
-				Location minLoc = null;
-				double minDistance = Double.MAX_VALUE;
+			Location minLoc = getClosestLocation(locs, loc);
 
-				for (Location temp : locs) {
-					double distance = distance(loc, temp);
-					if (distance == Math.min(minDistance, distance)) {
-						minDistance = distance;
-						minLoc = temp;
-					}
-				}
-
+			if (minLoc != null)
 				player.sendMessage(TAG + " The closest block is (" + minLoc.getX() + "," + minLoc.getY() + "," + minLoc.getZ() + ") with a distance of "
-						+ minDistance);
-			}
+						+ distance(minLoc, loc));
 
 			return true;
 		}
@@ -130,5 +120,31 @@ public class BlockLocator extends JavaPlugin {
 	 */
 	private static double distance(Location loc1, Location loc2) {
 		return Math.sqrt(Math.pow(loc1.getX() - loc2.getX(), 2.0) + Math.pow(loc1.getY() - loc2.getY(), 2.0) + Math.pow(loc1.getZ() - loc2.getZ(), 2.0));
+	}
+
+	/**
+	 * 
+	 * @param locations
+	 *            the list of locations that will be compared
+	 * @param position
+	 *            the position
+	 * @return the location that is closest to the position
+	 */
+	private static Location getClosestLocation(List<Location> locations, Location position) {
+		if (locations.size() < 1)
+			return null;
+
+		Location minLoc = null;
+		double minDistance = Double.MAX_VALUE;
+
+		for (Location temp : locations) {
+			double distance = distance(position, temp);
+			if (distance == Math.min(minDistance, distance)) {
+				minDistance = distance;
+				minLoc = temp;
+			}
+		}
+
+		return minLoc;
 	}
 }
