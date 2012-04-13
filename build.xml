@@ -30,7 +30,7 @@
     </target>
 
     <target name="jar" depends="clean,build">
-        <jar destfile="$bin/{label}.jar" basedir="bin" />
+        <jar destfile="bin/${label}.jar" basedir="bin" />
     </target>
 
     <target name="dist" depends="clean,build,jar">
