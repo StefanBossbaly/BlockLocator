@@ -3,7 +3,8 @@
 
     <property name="bukkit-location" value="bukkit.jar"/>
     <property name="output-jar" value="${ant.project.name}.jar"/>
-
+    <property environment="env"/>
+    <property name="label" value="${env.JOB_NAME}-${env.BUILD_NUMBER}"/>
     <property name="debuglevel" value="source,lines"/>
 
     <path id="classpath">
@@ -29,7 +30,7 @@
     </target>
 
     <target name="jar" depends="build">
-        <jar destfile="${output-jar}" basedir="bin" />
+        <jar destfile="${label}" basedir="bin" />
     </target>
 
     <target name="dist" depends="clean,build,jar">
