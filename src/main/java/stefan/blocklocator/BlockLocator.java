@@ -60,8 +60,8 @@ public class BlockLocator extends JavaPlugin {
 				return true;
 			}
 
-			// Make sure that we have enough parameters
-			if (args.length < 1){
+			// Make sure that we have enough parameters or the help command was issued
+			if (args.length < 1 || "help".equals(args[0].toLowerCase())){
 				sender.sendMessage(TAG + " /bl [block_id] [radius]");
 				return false;
 			}
