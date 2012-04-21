@@ -43,6 +43,9 @@ public class BlockLocator extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		log.info(TAG + " onDisable() called. Shutting down ...");
+
+		// Cancel all pending actions
+		worker.cancel();
 	}
 
 	/**
@@ -51,7 +54,7 @@ public class BlockLocator extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		log.info(TAG + " onEnabled() called. Starting up ...");
-		
+
 		map = new HashMap<Player, Holder>();
 	}
 
@@ -209,11 +212,12 @@ public class BlockLocator extends JavaPlugin {
 		public Location blockLocation;
 		public TimerTask timer;
 
-		public Holder(Player playerP, Location lastLocationP, Location blockLocationP) {
+		public Holder(Player playerP, Location lastLocationP,
+				Location blockLocationP) {
 			player = playerP;
 			lastLocation = lastLocationP;
 			blockLocation = blockLocationP;
-			
+
 			timer = new TimerTask() {
 
 				@Override
@@ -232,7 +236,7 @@ public class BlockLocator extends JavaPlugin {
 					}
 				}
 			};
-			
+
 			worker.schedule(timer, 1000L, 1000L);
 		}
 	}
