@@ -62,15 +62,13 @@ public class BlockLocator extends JavaPlugin {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean onCommand(CommandSender sender, Command command,
-			String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 		if (command.getName().equalsIgnoreCase("bl")) {
 
 			// The console can not call this command
 			if (!(sender instanceof Player)) {
-				sender.sendMessage(TAG
-						+ " I can not get you location and therefore can't find blocks around you ...");
+				sender.sendMessage(TAG + " I can not get you location and therefore can't find blocks around you ...");
 				return true;
 			}
 
@@ -105,8 +103,7 @@ public class BlockLocator extends JavaPlugin {
 			Location loc = player.getLocation();
 
 			// Log this command took place
-			log.info(TAG + "Player: " + player.getName()
-					+ " has called the locate command from location " + loc);
+			log.info(TAG + "Player: " + player.getName() + " has called the locate command from location " + loc);
 
 			// List that will hold the block that were found
 			LinkedList<Location> locs = searchBlocks(loc, blockId, radius);
@@ -116,9 +113,7 @@ public class BlockLocator extends JavaPlugin {
 			Location minLoc = getClosestLocation(locs, loc);
 
 			if (minLoc != null)
-				player.sendMessage(TAG + " The closest block is ("
-						+ minLoc.getX() + "," + minLoc.getY() + ","
-						+ minLoc.getZ() + ") with a distance of "
+				player.sendMessage(TAG + " The closest block is (" + minLoc.getX() + "," + minLoc.getY() + "," + minLoc.getZ() + ") with a distance of "
 						+ distance(minLoc, loc));
 
 			return true;
@@ -127,8 +122,7 @@ public class BlockLocator extends JavaPlugin {
 		else if (command.getName().equalsIgnoreCase("bl_hc")) {
 			// The console can not call this command
 			if (!(sender instanceof Player)) {
-				sender.sendMessage(TAG
-						+ " I can not get you location and therefore can't find blocks around you ...");
+				sender.sendMessage(TAG + " I can not get you location and therefore can't find blocks around you ...");
 				return true;
 			}
 
@@ -172,8 +166,7 @@ public class BlockLocator extends JavaPlugin {
 	 *            the radius from the location
 	 * @return a list of locations that have the block id
 	 */
-	public static LinkedList<Location> searchBlocks(Location loc, int blockId,
-			int radius) {
+	public static LinkedList<Location> searchBlocks(Location loc, int blockId, int radius) {
 		// List that will hold the block that were found
 		LinkedList<Location> locs = new LinkedList<Location>();
 
@@ -181,12 +174,9 @@ public class BlockLocator extends JavaPlugin {
 
 		int adjustedRadius = (int) Math.ceil(radius / 2.0);
 
-		for (int x = loc.getBlockX() - adjustedRadius; x < loc.getBlockX()
-				+ adjustedRadius; x++) {
-			for (int y = loc.getBlockY() - adjustedRadius; y < loc.getBlockY()
-					+ adjustedRadius; y++) {
-				for (int z = loc.getBlockZ() - adjustedRadius; z < loc
-						.getBlockZ() + adjustedRadius; z++) {
+		for (int x = loc.getBlockX() - adjustedRadius; x < loc.getBlockX() + adjustedRadius; x++) {
+			for (int y = loc.getBlockY() - adjustedRadius; y < loc.getBlockY() + adjustedRadius; y++) {
+				for (int z = loc.getBlockZ() - adjustedRadius; z < loc.getBlockZ() + adjustedRadius; z++) {
 					if (world.getBlockTypeIdAt(x, y, z) == blockId)
 						locs.add(world.getBlockAt(x, y, z).getLocation());
 				}
@@ -206,9 +196,7 @@ public class BlockLocator extends JavaPlugin {
 	 * @return the distance between the locations
 	 */
 	public static double distance(Location loc1, Location loc2) {
-		return Math.sqrt(Math.pow(loc1.getX() - loc2.getX(), 2.0)
-				+ Math.pow(loc1.getY() - loc2.getY(), 2.0)
-				+ Math.pow(loc1.getZ() - loc2.getZ(), 2.0));
+		return Math.sqrt(Math.pow(loc1.getX() - loc2.getX(), 2.0) + Math.pow(loc1.getY() - loc2.getY(), 2.0) + Math.pow(loc1.getZ() - loc2.getZ(), 2.0));
 	}
 
 	/**
@@ -221,8 +209,7 @@ public class BlockLocator extends JavaPlugin {
 	 *            the position
 	 * @return the location that is closest to the position
 	 */
-	private static Location getClosestLocation(List<Location> locations,
-			Location position) {
+	private static Location getClosestLocation(List<Location> locations, Location position) {
 		if (locations.size() < 1)
 			return null;
 
@@ -246,8 +233,7 @@ public class BlockLocator extends JavaPlugin {
 		public Location blockLocation;
 		public TimerTask timer;
 
-		public Holder(Player playerP, Location lastLocationP,
-				Location blockLocationP) {
+		public Holder(Player playerP, Location lastLocationP, Location blockLocationP) {
 			player = playerP;
 			lastLocation = lastLocationP;
 			blockLocation = blockLocationP;
@@ -256,10 +242,8 @@ public class BlockLocator extends JavaPlugin {
 
 				@Override
 				public void run() {
-					double oldDistance = BlockLocator.distance(lastLocation,
-							blockLocation);
-					double newDistance = BlockLocator.distance(
-							player.getLocation(), blockLocation);
+					double oldDistance = BlockLocator.distance(lastLocation, blockLocation);
+					double newDistance = BlockLocator.distance(player.getLocation(), blockLocation);
 
 					if (Math.abs(newDistance - oldDistance) <= 2.0) {
 						player.sendMessage("You found it!");
