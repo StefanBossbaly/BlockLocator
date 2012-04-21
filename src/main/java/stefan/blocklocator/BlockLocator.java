@@ -164,13 +164,46 @@ public class BlockLocator extends JavaPlugin {
 			Location minLoc = getClosestLocation(locs, loc);
 
 			map.put(player, new Holder(player, player.getLocation(), minLoc));
-			
+
 			player.sendMessage(TAG + " Run \\bl_hc to stop recieving updates");
 
 			return true;
 		}
 
 		return false;
+	}
+
+	/**
+	 * Returns a list of locations of the blocks that matched the block id and
+	 * were contained in the search radius from the location
+	 * 
+	 * @param loc
+	 *            the center location
+	 * @param blockId
+	 *            the block id which is being searched
+	 * @param radius
+	 *            the radius from the location
+	 * @return a list of locations that have the block id
+	 */
+	public static List<Location> searchBlocks(Location loc, int blockId,
+			int radius) {
+		// List that will hold the block that were found
+		LinkedList<Location> locs = new LinkedList<Location>();
+
+		World world = loc.getWorld();
+		
+		int adjustedRadius = (int) Math.ceil(radius / 2.0); 
+		
+		for (int x = loc.getBlockX() - adjustedRadius; x < loc.getBlockX() + adjustedRadius; x++) {
+			for (int y = loc.getBlockY() - adjustedRadius; y < loc.getBlockY() + adjustedRadius; y++) {
+				for (int z = loc.getBlockZ() - adjustedRadius; z < loc.getBlockZ() + adjustedRadius; z++) {
+					if (world.getBlockTypeIdAt(x, y, z) == blockId)
+						locs.add(world.getBlockAt(x, y, z).getLocation());
+				}
+			}
+		}
+
+		return locs;
 	}
 
 	/**
@@ -238,12 +271,11 @@ public class BlockLocator extends JavaPlugin {
 					double newDistance = BlockLocator.distance(
 							player.getLocation(), blockLocation);
 
-					if (Math.abs(newDistance - oldDistance) <= 2.0){
+					if (Math.abs(newDistance - oldDistance) <= 2.0) {
 						player.sendMessage("You found it!");
 						timer.cancel();
 						map.put(player, null);
-					}
-					else if (oldDistance > newDistance) {
+					} else if (oldDistance > newDistance) {
 						player.sendMessage("Getting Hotter");
 						lastLocation = player.getLocation();
 					} else {
