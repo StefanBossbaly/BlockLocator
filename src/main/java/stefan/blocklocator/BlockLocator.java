@@ -126,7 +126,7 @@ public class BlockLocator extends JavaPlugin {
 			return true;
 		}
 
-		else if (command.getName().equalsIgnoreCase("blhc")) {
+		else if (command.getName().equalsIgnoreCase("bl_hc")) {
 			// The console can not call this command
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(TAG
@@ -138,6 +138,15 @@ public class BlockLocator extends JavaPlugin {
 			Player player = (Player) sender;
 			Location loc = player.getLocation();
 			World world = player.getWorld();
+
+			// Check to see if the player wants to turn it off
+			if (map.get(player) != null) {
+				// Cancel the timer
+				map.get(player).timer.cancel();
+				map.put(player, null);
+
+				return true;
+			}
 
 			// List that will hold the block that were found
 			LinkedList<Location> locs = new LinkedList<Location>();
