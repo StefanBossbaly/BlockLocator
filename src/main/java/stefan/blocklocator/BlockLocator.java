@@ -89,6 +89,15 @@ public class BlockLocator extends JavaPlugin {
 				return true;
 			}
 
+			int radius = 5;
+
+			if (args.length > 1) {
+				try {
+					radius = Integer.parseInt(args[1]);
+				} catch (NumberFormatException e) {
+				}
+			}
+
 			// Get all the fun stuff
 			Player player = (Player) sender;
 			Location loc = player.getLocation();
@@ -98,7 +107,7 @@ public class BlockLocator extends JavaPlugin {
 					+ " has called the locate command from location " + loc);
 
 			// List that will hold the block that were found
-			LinkedList<Location> locs = searchBlocks(loc, blockId, 5);
+			LinkedList<Location> locs = searchBlocks(loc, blockId, radius);
 
 			player.sendMessage(TAG + " Found " + locs.size() + " many blocks");
 
@@ -167,12 +176,15 @@ public class BlockLocator extends JavaPlugin {
 		LinkedList<Location> locs = new LinkedList<Location>();
 
 		World world = loc.getWorld();
-		
-		int adjustedRadius = (int) Math.ceil(radius / 2.0); 
-		
-		for (int x = loc.getBlockX() - adjustedRadius; x < loc.getBlockX() + adjustedRadius; x++) {
-			for (int y = loc.getBlockY() - adjustedRadius; y < loc.getBlockY() + adjustedRadius; y++) {
-				for (int z = loc.getBlockZ() - adjustedRadius; z < loc.getBlockZ() + adjustedRadius; z++) {
+
+		int adjustedRadius = (int) Math.ceil(radius / 2.0);
+
+		for (int x = loc.getBlockX() - adjustedRadius; x < loc.getBlockX()
+				+ adjustedRadius; x++) {
+			for (int y = loc.getBlockY() - adjustedRadius; y < loc.getBlockY()
+					+ adjustedRadius; y++) {
+				for (int z = loc.getBlockZ() - adjustedRadius; z < loc
+						.getBlockZ() + adjustedRadius; z++) {
 					if (world.getBlockTypeIdAt(x, y, z) == blockId)
 						locs.add(world.getBlockAt(x, y, z).getLocation());
 				}
