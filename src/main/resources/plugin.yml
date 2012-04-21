@@ -6,9 +6,9 @@ commands:
     bl:
         description: Finds the nearest blocks of the specified id
         permission: blocklocator.locate
-        usage: /<command> [block id] - Used to find the nearest blocks of the specified id
-    blhc:
-        description: Finds the nearest blocks of the specified id
-        permission: blocklocator.locate
-        usage: /<command> [block id] - Used to find the nearest blocks of the specified id
+        usage: /<command> [block id] [radius]
+    bl_hc:
+        description: Finds the nearest blocks of the specified id and then tells the player if they are getting hotter or colder to the block at 1 second intervals
+        permission: blocklocator.hot_cold
+        usage: /bl_hc [block id]
         
