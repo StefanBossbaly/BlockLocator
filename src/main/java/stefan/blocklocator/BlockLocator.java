@@ -76,10 +76,8 @@ public class BlockLocator extends JavaPlugin {
 
 			// Make sure that we have enough parameters or the help command was
 			// issued
-			if (args.length < 1 || "help".equals(args[0].toLowerCase())) {
-				sender.sendMessage(TAG + " /bl [block_id] [radius]");
+			if (args.length < 1 || "help".equals(args[0].toLowerCase()))
 				return false;
-			}
 
 			int blockId;
 
