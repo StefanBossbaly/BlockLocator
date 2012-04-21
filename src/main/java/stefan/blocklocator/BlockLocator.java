@@ -238,7 +238,12 @@ public class BlockLocator extends JavaPlugin {
 					double newDistance = BlockLocator.distance(
 							player.getLocation(), blockLocation);
 
-					if (oldDistance > newDistance) {
+					if (Math.abs(newDistance - oldDistance) <= 2.0){
+						player.sendMessage("You found it!");
+						timer.cancel();
+						map.put(player, null);
+					}
+					else if (oldDistance > newDistance) {
 						player.sendMessage("Getting Hotter");
 						lastLocation = player.getLocation();
 					} else {
