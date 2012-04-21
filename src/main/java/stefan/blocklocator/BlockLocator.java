@@ -85,7 +85,7 @@ public class BlockLocator extends JavaPlugin {
 			try {
 				blockId = Integer.parseInt(args[0]);
 			} catch (NumberFormatException e) {
-				sender.sendMessage(TAG + " This is not a valid integer!");
+				sender.sendMessage(TAG + " The block id is not a valid integer!");
 				return true;
 			}
 
@@ -95,6 +95,8 @@ public class BlockLocator extends JavaPlugin {
 				try {
 					radius = Integer.parseInt(args[1]);
 				} catch (NumberFormatException e) {
+					sender.sendMessage(TAG + " The block id is not a valid integer!");
+					return true;
 				}
 			}
 
