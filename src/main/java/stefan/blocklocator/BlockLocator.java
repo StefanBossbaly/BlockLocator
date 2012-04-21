@@ -29,6 +29,8 @@ public class BlockLocator extends JavaPlugin {
 	 * Logger that will be used to output messages to the log.
 	 */
 	public static final Logger log = Logger.getLogger("Minecraft");
+	
+	private BlockLocatorPlayerListener listener;
 
 	/**
 	 * {@inheritDoc}
@@ -44,6 +46,10 @@ public class BlockLocator extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		log.info(TAG + " onEnabled() called. Starting up ...");
+		
+		//Register the listener for updates
+		listener = new BlockLocatorPlayerListener();
+		getServer().getPluginManager().registerEvents(listener, this);
 	}
 
 	/**
@@ -107,6 +113,38 @@ public class BlockLocator extends JavaPlugin {
 
 			return true;
 		}
+		
+		else if (command.getName().equalsIgnoreCase("blhc")){
+			// The console can not call this command
+			if (!(sender instanceof Player)) {
+				sender.sendMessage(TAG + " I can not get you location and therefore can't find blocks around you ...");
+				return true;
+			}
+			
+			// Get all the fun stuff
+			Player player = (Player) sender;
+			Location loc = player.getLocation();
+			World world = player.getWorld();
+			
+			// List that will hold the block that were found
+			LinkedList<Location> locs = new LinkedList<Location>();
+			
+			// TODO change the search radius
+			for (int x = loc.getBlockX() - 10; x < loc.getBlockX() + 10; x++) {
+				for (int y = loc.getBlockY() - 10; y < loc.getBlockY() + 10; y++) {
+					for (int z = loc.getBlockZ() - 10; z < loc.getBlockZ() + 10; z++) {
+						if (world.getBlockTypeIdAt(x, y, z) == 1)
+							locs.add(world.getBlockAt(x, y, z).getLocation());
+					}
+				}
+			}
+			
+			Location minLoc = getClosestLocation(locs, loc);
+			
+			listener.addPlayer(player, minLoc);
+			
+			return true;
+		}
 
 		return false;
 	}
@@ -120,7 +158,7 @@ public class BlockLocator extends JavaPlugin {
 	 *            the second location
 	 * @return the distance between the locations
 	 */
-	private static double distance(Location loc1, Location loc2) {
+	public static double distance(Location loc1, Location loc2) {
 		return Math.sqrt(Math.pow(loc1.getX() - loc2.getX(), 2.0) + Math.pow(loc1.getY() - loc2.getY(), 2.0) + Math.pow(loc1.getZ() - loc2.getZ(), 2.0));
 	}
 
