@@ -165,7 +165,7 @@ public class BlockLocator extends JavaPlugin {
 
 			map.put(player, new Holder(player, player.getLocation(), minLoc));
 			
-			player.sendMessage(TAG + " Run \bl_hc to stop recieving updates");
+			player.sendMessage(TAG + " Run \\bl_hc to stop recieving updates");
 
 			return true;
 		}
