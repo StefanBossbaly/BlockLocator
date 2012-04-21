@@ -94,24 +94,13 @@ public class BlockLocator extends JavaPlugin {
 			// Get all the fun stuff
 			Player player = (Player) sender;
 			Location loc = player.getLocation();
-			World world = player.getWorld();
-
-			// List that will hold the block that were found
-			LinkedList<Location> locs = new LinkedList<Location>();
 
 			// Log this command took place
 			log.info(TAG + "Player: " + player.getName()
 					+ " has called the locate command from location " + loc);
 
-			// TODO change the search radius
-			for (int x = loc.getBlockX() - 10; x < loc.getBlockX() + 10; x++) {
-				for (int y = loc.getBlockY() - 10; y < loc.getBlockY() + 10; y++) {
-					for (int z = loc.getBlockZ() - 10; z < loc.getBlockZ() + 10; z++) {
-						if (world.getBlockTypeIdAt(x, y, z) == blockId)
-							locs.add(world.getBlockAt(x, y, z).getLocation());
-					}
-				}
-			}
+			// List that will hold the block that were found
+			LinkedList<Location> locs = searchBlocks(loc, blockId, 5);
 
 			player.sendMessage(TAG + " Found " + locs.size() + " many blocks");
 
@@ -137,7 +126,6 @@ public class BlockLocator extends JavaPlugin {
 			// Get all the fun stuff
 			Player player = (Player) sender;
 			Location loc = player.getLocation();
-			World world = player.getWorld();
 
 			// Check to see if the player wants to turn it off
 			if (map.get(player) != null) {
@@ -149,17 +137,7 @@ public class BlockLocator extends JavaPlugin {
 			}
 
 			// List that will hold the block that were found
-			LinkedList<Location> locs = new LinkedList<Location>();
-
-			// TODO change the search radius
-			for (int x = loc.getBlockX() - 10; x < loc.getBlockX() + 10; x++) {
-				for (int y = loc.getBlockY() - 10; y < loc.getBlockY() + 10; y++) {
-					for (int z = loc.getBlockZ() - 10; z < loc.getBlockZ() + 10; z++) {
-						if (world.getBlockTypeIdAt(x, y, z) == 1)
-							locs.add(world.getBlockAt(x, y, z).getLocation());
-					}
-				}
-			}
+			LinkedList<Location> locs = searchBlocks(loc, 1, 5);
 
 			Location minLoc = getClosestLocation(locs, loc);
 
@@ -185,7 +163,7 @@ public class BlockLocator extends JavaPlugin {
 	 *            the radius from the location
 	 * @return a list of locations that have the block id
 	 */
-	public static List<Location> searchBlocks(Location loc, int blockId,
+	public static LinkedList<Location> searchBlocks(Location loc, int blockId,
 			int radius) {
 		// List that will hold the block that were found
 		LinkedList<Location> locs = new LinkedList<Location>();
