@@ -1,11 +1,7 @@
 package stefan.blocklocator;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Logger;
 
 import org.bukkit.Location;
@@ -23,9 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class BlockLocator extends JavaPlugin {
 
-	private static final Timer worker = new Timer();
-
-	private Map<Player, Holder> map;
 	/**
 	 * The tag that will be displayed in the logs for this plugin. Helps the
 	 * user/server admin distinguish between logs of different plugins.
@@ -37,6 +30,8 @@ public class BlockLocator extends JavaPlugin {
 	 */
 	public static final Logger log = Logger.getLogger("Minecraft");
 
+	public HotColdManager manager;
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -45,7 +40,7 @@ public class BlockLocator extends JavaPlugin {
 		log.info(TAG + " onDisable() called. Shutting down ...");
 
 		// Cancel all pending actions
-		worker.cancel();
+		manager.stopAllUpdates();
 	}
 
 	/**
@@ -55,7 +50,7 @@ public class BlockLocator extends JavaPlugin {
 	public void onEnable() {
 		log.info(TAG + " onEnabled() called. Starting up ...");
 
-		map = new HashMap<Player, Holder>();
+		manager = new HotColdManager(this);
 	}
 
 	/**
@@ -130,21 +125,17 @@ public class BlockLocator extends JavaPlugin {
 			Player player = (Player) sender;
 			Location loc = player.getLocation();
 
-			// Check to see if the player wants to turn it off
-			if (map.get(player) != null) {
-				// Cancel the timer
-				map.get(player).timer.cancel();
-				map.put(player, null);
-
-				return true;
-			}
+			if (manager.isRecivingUpdates(player))
+				manager.unregisterForUpdates(player);
 
 			// List that will hold the block that were found
 			LinkedList<Location> locs = searchBlocks(loc, 1, 5);
-
 			Location minLoc = getClosestLocation(locs, loc);
 
-			map.put(player, new Holder(player, player.getLocation(), minLoc));
+			if (minLoc == null)
+				return true;
+
+			manager.registerForUpdates(player, minLoc);
 
 			player.sendMessage(TAG + " Run \\bl_hc to stop recieving updates");
 
@@ -225,41 +216,5 @@ public class BlockLocator extends JavaPlugin {
 		}
 
 		return minLoc;
-	}
-
-	private class Holder {
-		public Player player;
-		public Location lastLocation;
-		public Location blockLocation;
-		public TimerTask timer;
-
-		public Holder(Player playerP, Location lastLocationP, Location blockLocationP) {
-			player = playerP;
-			lastLocation = lastLocationP;
-			blockLocation = blockLocationP;
-
-			timer = new TimerTask() {
-
-				@Override
-				public void run() {
-					double oldDistance = BlockLocator.distance(lastLocation, blockLocation);
-					double newDistance = BlockLocator.distance(player.getLocation(), blockLocation);
-
-					if (newDistance <= 2.0) {
-						player.sendMessage("You found it!");
-						timer.cancel();
-						map.put(player, null);
-					} else if (oldDistance > newDistance) {
-						player.sendMessage("Getting Hotter");
-						lastLocation = player.getLocation();
-					} else {
-						player.sendMessage("Getting Colder");
-						lastLocation = player.getLocation();
-					}
-				}
-			};
-
-			worker.schedule(timer, 1000L, 1000L);
-		}
 	}
 }
